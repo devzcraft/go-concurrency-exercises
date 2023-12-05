@@ -7,6 +7,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"sync"
 	"testing"
@@ -26,6 +27,9 @@ func TestMain(t *testing.T) {
 	if db.Calls > callsPerCycle {
 		t.Errorf("Too much db uses %v", db.Calls)
 	}
+	fmt.Println("cache size", cacheLen)
+	fmt.Println("page size", pagesLen)
+	fmt.Println("db calls", db.Calls)
 }
 
 func TestLRU(t *testing.T) {
@@ -39,7 +43,7 @@ func TestLRU(t *testing.T) {
 		wg.Add(1)
 		go func(i int) {
 			value := cache.Get("Test" + strconv.Itoa(i))
-			if value != "Test" + strconv.Itoa(i) {
+			if value != "Test"+strconv.Itoa(i) {
 				t.Errorf("Incorrect db response %v", value)
 			}
 			wg.Done()
